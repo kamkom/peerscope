@@ -1,0 +1,10 @@
+---
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import EventsView from "@/components/Dashboard/EventsView.tsx";
+---
+
+<DashboardLayout title="Zdarzenia | Peerscope">
+  <div class="container mx-auto max-w-6xl py-10">
+    <EventsView client:load />
+  </div>
+</DashboardLayout>

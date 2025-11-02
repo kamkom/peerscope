@@ -1,0 +1,81 @@
+-- -- migration_meta_data:
+-- --   purpose: seed sample characters and provide reusable seeding function
+-- --   affected_tables: characters
+-- --   author: Assistant
+-- --   timestamp: 2025-10-29 12:00:00
+
+-- -- safe, idempotent helper: creates characters for a given user if they don't already exist by (user_id, name)
+-- create or replace function public.seed_sample_characters(p_user_id uuid)
+-- returns void
+-- language plpgsql
+-- as $$
+-- begin
+--   -- Anna Kowalska (Product Manager)
+--   insert into public.characters (user_id, name, role, description, traits, motivations, avatar_url, is_owner)
+--   select p_user_id,
+--          'Anna Kowalska',
+--          'Product Manager',
+--          'Odpowiada za roadmapę produktu i priorytetyzację zadań. Łączy potrzeby biznesu z perspektywą użytkownika, dba o komunikację między zespołami i mierniki sukcesu.',
+--          array['empatyczna','asertywna','analityczna','zorientowana na wartość','dobry mediator']::text[],
+--          array['dostarczanie wartości klientom','klarowna komunikacja','współpraca międzydziałowa','rozwój produktu']::text[],
+--          'https://api.dicebear.com/9.x/adventurer/svg?seed=AnnaK',
+--          true
+--   where not exists (
+--     select 1 from public.characters c where c.user_id = p_user_id and c.name = 'Anna Kowalska'
+--   );
+
+--   -- Piotr Nowak (Senior Backend Engineer)
+--   insert into public.characters (user_id, name, role, description, traits, motivations, avatar_url, is_owner)
+--   select p_user_id,
+--          'Piotr Nowak',
+--          'Senior Backend Engineer',
+--          'Projektuje i utrzymuje serwisy o wysokiej dostępności. Skupia się na jakości kodu, obserwowalności i automatyzacji procesów. Lubi jasne wymagania i mierzalne cele.',
+--          array['dokładny','skupiony na jakości','introwertyczny','pragmatyczny','proaktywny w automatyzacji']::text[],
+--          array['stabilność systemu','czysty i testowalny kod','mniej pracy manualnej','wyraźne priorytety']::text[],
+--          'https://api.dicebear.com/9.x/adventurer/svg?seed=PiotrN',
+--          false
+--   where not exists (
+--     select 1 from public.characters c where c.user_id = p_user_id and c.name = 'Piotr Nowak'
+--   );
+
+--   -- Marta Zielińska (HR Business Partner)
+--   insert into public.characters (user_id, name, role, description, traits, motivations, avatar_url, is_owner)
+--   select p_user_id,
+--          'Marta Zielińska',
+--          'HR Business Partner',
+--          'Wspiera menedżerów w procesach HR, odpowiada za kulturę organizacyjną i rozwój kompetencji. Zwraca uwagę na transparentność i dobrostan zespołów.',
+--          array['komunikatywna','dyplomatyczna','zorientowana na ludzi','cierpliwa','systemowa']::text[],
+--          array['spójna komunikacja','rozwój talentów','profilaktyka konfliktów','zdrowe procesy HR']::text[],
+--          'https://api.dicebear.com/9.x/adventurer/svg?seed=MartaZ',
+--          false
+--   where not exists (
+--     select 1 from public.characters c where c.user_id = p_user_id and c.name = 'Marta Zielińska'
+--   );
+
+--   -- Krzysztof Malinowski (Senior Product Designer)
+--   insert into public.characters (user_id, name, role, description, traits, motivations, avatar_url, is_owner)
+--   select p_user_id,
+--          'Krzysztof Malinowski',
+--          'Senior Product Designer',
+--          'Odpowiada za spójność doświadczenia użytkownika i warstwę wizualną. Preferuje eksplorację wielu wariantów i dopracowanie detali przed wdrożeniem. Często kwestionuje terminy, gdy wpływają na jakość doświadczenia.',
+--          array['perfekcjonista','nastawiony na estetykę','proaktywny w proponowaniu zmian','asertywny w obronie UX','skłonny do poszerzania zakresu']::text[],
+--          array['spójność doświadczenia end-to-end','wysoka jakość wizualna','badania z użytkownikami','czas na iteracje i testy','silna wizja produktowa']::text[],
+--          'https://api.dicebear.com/9.x/adventurer/svg?seed=KrzysztofM',
+--          false
+--   where not exists (
+--     select 1 from public.characters c where c.user_id = p_user_id and c.name = 'Krzysztof Malinowski'
+--   );
+-- end;
+-- $$;
+
+-- -- optional: seed for the first available profile (no-op if none exists)
+-- do $$
+-- declare v_user_id uuid;
+-- begin
+--   select id into v_user_id from public.profiles order by created_at asc limit 1;
+--   if v_user_id is not null then
+--     perform public.seed_sample_characters(v_user_id);
+--   end if;
+-- end $$;
+
+

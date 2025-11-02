@@ -1,0 +1,64 @@
+---
+import { EventForm } from "../../../../components/Event/EventForm";
+import DashboardLayout from "../../../../layouts/DashboardLayout.astro";
+import { EventService } from "../../../../lib/services/event.service";
+import type { AiAnalysisDto, EventDto } from "../../../../types";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { AnalysisAccordion } from "../../../../components/Event/AnalysisAccordion";
+
+// This page is protected by middleware, ensuring only authenticated users can access it.
+const { id } = Astro.params;
+const { supabase, user } = Astro.locals;
+
+let analysis: AiAnalysisDto | undefined;
+let event: EventDto | undefined;
+let analysisResult: { analysis: string; objective_evaluation: string; generated_summary: string } | undefined;
+
+if (id && user) {
+  try {
+    event = await EventService.getEventById(supabase, id, user.id);
+    const analyses = await EventService.getEventAnalyses(supabase, id, user.id);
+    if (analyses.length > 0) {
+      analysis = analyses[0]; // Get the most recent analysis
+      analysisResult = analysis.result as any;
+    }
+  } catch (error) {
+    console.error("Failed to fetch event analysis:", error);
+    // Fail gracefully, the page will render without the analysis section.
+  }
+}
+---
+
+<DashboardLayout title="Edit Event">
+  <div class="container mx-auto py-8">
+    {
+      event && analysis ? (
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <EventForm event={event} client:load />
+          </div>
+          <div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Analiza Mediacyjna</CardTitle>
+                <CardDescription>
+                  To jest automatycznie wygenerowana analiza sytuacji na podstawie danych, które wprowadziłeś.
+                  {analysis.outdated_data_warning && (
+                    <p class="mt-2 text-sm font-semibold text-destructive">{analysis.outdated_data_warning}</p>
+                  )}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {analysisResult && <AnalysisAccordion analysisResult={analysisResult} client:load />}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      ) : event ? (
+        <EventForm event={event} client:load />
+      ) : (
+        <p>Ładowanie danych...</p>
+      )
+    }
+  </div>
+</DashboardLayout>

@@ -1,0 +1,138 @@
+---
+import { Button } from "@/components/ui/button";
+import UserDropdown from "@/components/Auth/UserDropdown";
+
+const { user } = Astro.locals;
+---
+
+<header class="bg-background/95 sticky top-0 z-50 w-full border-b border-border/40 backdrop-blur-sm">
+  <div class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="/" class="mr-6 flex items-center space-x-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="h-6 w-6"
+      >
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+      </svg>
+      <span class="font-bold">Peerscope</span>
+    </a>
+    <div class="flex items-center space-x-4">
+      <nav class="hidden md:flex items-center space-x-4">
+        {
+          user ? (
+            <UserDropdown user={user} client:load />
+          ) : (
+            <>
+              <Button variant="ghost" id="login-button">
+                Zaloguj się
+              </Button>
+              <Button id="register-button">Zarejestruj się</Button>
+            </>
+          )
+        }
+      </nav>
+      <button
+        id="mobile-menu-button"
+        class="md:hidden p-2 rounded-md inline-flex items-center justify-center text-muted-foreground hover:text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Otwórz menu główne</span>
+        <svg
+          id="menu-closed-icon"
+          class="block h-6 w-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg
+          id="menu-open-icon"
+          class="hidden h-6 w-6"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="hidden md:hidden" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      {
+        user ? (
+          <>
+            <a href="/dashboard">
+              <Button variant="ghost" class="w-full justify-start">
+                Panel
+              </Button>
+            </a>
+            <a href="/api/auth/signout">
+              <Button class="w-full justify-start">Wyloguj</Button>
+            </a>
+          </>
+        ) : (
+          <>
+            <Button variant="ghost" id="mobile-login-button" class="w-full justify-start">
+              Zaloguj się
+            </Button>
+            <Button id="mobile-register-button" class="w-full justify-start">
+              Zarejestruj się
+            </Button>
+          </>
+        )
+      }
+    </div>
+  </div>
+</header>
+
+<script>
+  import { useAuthModalStore } from "@/lib/stores/authModal.store";
+
+  document.addEventListener("astro:page-load", () => {
+    const { openModal } = useAuthModalStore.getState();
+
+    document.body.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+
+      const loginButton = target.closest("#login-button, #mobile-login-button");
+      if (loginButton) {
+        openModal("login");
+        return;
+      }
+
+      const registerButton = target.closest("#register-button, #mobile-register-button");
+      if (registerButton) {
+        openModal("register");
+        return;
+      }
+
+      const mobileMenuButton = target.closest("#mobile-menu-button");
+      if (mobileMenuButton) {
+        const mobileMenu = document.getElementById("mobile-menu");
+        const menuClosedIcon = document.getElementById("menu-closed-icon");
+        const menuOpenIcon = document.getElementById("menu-open-icon");
+
+        if (mobileMenu && menuClosedIcon && menuOpenIcon) {
+          const isExpanded = mobileMenuButton.getAttribute("aria-expanded") === "true";
+          mobileMenuButton.setAttribute("aria-expanded", String(!isExpanded));
+          mobileMenu.classList.toggle("hidden");
+          menuClosedIcon.classList.toggle("hidden");
+          menuOpenIcon.classList.toggle("hidden");
+        }
+      }
+    });
+  });
+</script>

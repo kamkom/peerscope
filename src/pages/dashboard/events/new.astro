@@ -1,0 +1,12 @@
+---
+import { EventForm } from "../../../components/Event/EventForm";
+import DashboardLayout from "../../../layouts/DashboardLayout.astro";
+
+// This page is protected by middleware, ensuring only authenticated users can access it.
+---
+
+<DashboardLayout title="Dodaj zdarzenie">
+  <div class="container mx-auto py-8">
+    <EventForm client:load />
+  </div>
+</DashboardLayout>

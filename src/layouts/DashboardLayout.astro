@@ -1,0 +1,20 @@
+---
+import Layout from "./Layout.astro";
+import Sidebar from "../components/Dashboard/Sidebar.astro";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const isProfileComplete = Astro.locals.profileComplete ?? false;
+---
+
+<Layout title={title} mainClass="flex flex-grow">
+  <div class="flex w-full">
+    <Sidebar isProfileComplete={isProfileComplete} />
+    <main class="flex-1 p-8">
+      <slot />
+    </main>
+  </div>
+</Layout>

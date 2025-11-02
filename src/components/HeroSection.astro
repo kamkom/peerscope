@@ -1,0 +1,66 @@
+---
+import type { User } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
+
+interface Props {
+  user: User | null;
+}
+
+const { user } = Astro.props;
+---
+
+<section class="w-full py-20 md:py-32 lg:py-40">
+  <div class="container mx-auto px-4 md:px-6 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h1
+        class="animate-shine bg-clip-text text-transparent bg-[linear-gradient(to_right,theme(colors.gray.900),theme(colors.gray.400),theme(colors.gray.900))] text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/tight pt-2 pb-2"
+      >
+        Uwolnij pełny potencjał swojego zespołu
+      </h1>
+      <p class="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground md:text-xl">
+        Peerscope zapewnia wgląd, którego potrzebujesz, aby budować silniejsze oraz bardziej efektywne zespoły. Zrozum
+        przepływy komunikacji, identyfikuj kluczowych współpracowników i wspieraj kulturę współpracy.
+      </p>
+      <div class="mt-8">
+        {!user && (
+          <Button
+            id="hero-register-button"
+            size="lg"
+            className="transition-transform transform hover:scale-105"
+          >
+            Zarejestruj się za darmo
+          </Button>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .animate-shine {
+    background-size: 200% auto;
+    animation: shine 3s linear infinite;
+  }
+
+  @keyframes shine {
+    to {
+      background-position: -200% center;
+    }
+  }
+</style>
+
+<script>
+  import { useAuthModalStore } from "@/lib/stores/authModal.store";
+
+  document.addEventListener("astro:page-load", () => {
+    const { openModal } = useAuthModalStore.getState();
+
+    const registerButton = document.getElementById("hero-register-button");
+
+    if (registerButton) {
+      registerButton.addEventListener("click", () => {
+        openModal("register");
+      });
+    }
+  });
+</script>
