@@ -75,20 +75,20 @@ const { user } = Astro.locals;
         user ? (
           <>
             <a href="/dashboard">
-              <Button variant="ghost" class="w-full justify-start">
+              <Button variant="ghost" className="w-full justify-start">
                 Panel
               </Button>
             </a>
             <a href="/api/auth/signout">
-              <Button class="w-full justify-start">Wyloguj</Button>
+              <Button className="w-full justify-start">Wyloguj</Button>
             </a>
           </>
         ) : (
           <>
-            <Button variant="ghost" id="mobile-login-button" class="w-full justify-start">
+            <Button variant="ghost" id="mobile-login-button" className="w-full justify-start">
               Zaloguj się
             </Button>
-            <Button id="mobile-register-button" class="w-full justify-start">
+            <Button id="mobile-register-button" className="w-full justify-start">
               Zarejestruj się
             </Button>
           </>

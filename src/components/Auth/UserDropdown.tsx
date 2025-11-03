@@ -26,7 +26,7 @@ export default function UserDropdown({ user }: UserDropdownProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-x-2">
+      <DropdownMenuTrigger className="flex items-center gap-x-2 cursor-pointer">
         <Avatar>
           <AvatarImage src={user.user_metadata?.avatar_url} />
           <AvatarFallback>{getInitials(user.email!)}</AvatarFallback>
