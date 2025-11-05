@@ -1,11 +1,12 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import tailwindcssTypography from "@tailwindcss/typography";
 
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import node from "@astrojs/node";
+
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,7 +22,19 @@ export default defineConfig({
       }),
     ],
   },
-  adapter: node({
-    mode: "standalone",
+  adapter: cloudflare({
+    imageService: "compile",
   }),
+  env: {
+    schema: {
+      SUPABASE_URL: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+      SUPABASE_KEY: envField.string({
+        context: "server",
+        access: "secret",
+      }),
+    },
+  },
 });

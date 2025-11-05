@@ -1,0 +1,4 @@
+name = "peerscope"
+compatibility_flags = [ "nodejs_compat", "disable_nodejs_process_v2" ]
+compatibility_date = "2025-11-03"
+pages_build_output_dir = "dist"

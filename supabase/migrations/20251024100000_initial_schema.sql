@@ -120,12 +120,6 @@ create index idx_ai_analyses_character_id on public.ai_analyses(character_id);
 -- section: helper functions and triggers
 -- description: utility functions and triggers for database automation.
 
--- helper function: auth.uid()
--- retrieves the user id from the jwt.
-create or replace function auth.uid() returns uuid as $$
-  select nullif(current_setting('request.jwt.claims', true)::json->>'sub', '')::uuid;
-$$ language sql stable;
-
 -- trigger function: handle_updated_at
 -- automatically updates the `updated_at` timestamp on row modification.
 create or replace function public.handle_updated_at()
@@ -170,7 +164,7 @@ create trigger on_auth_user_created
   for each row execute procedure public.handle_new_user();
 
 -- section: row-level security (rls)
--- description: enables and configures rls policies for data protection.
+-- description: enables and new rls policies for data protection.
 
 -- enable rls on all user-data tables.
 alter table public.profiles enable row level security;

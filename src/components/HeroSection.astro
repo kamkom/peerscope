@@ -22,15 +22,13 @@ const { user } = Astro.props;
         przepływy komunikacji, identyfikuj kluczowych współpracowników i wspieraj kulturę współpracy.
       </p>
       <div class="mt-8">
-        {!user && (
-          <Button
-            id="hero-register-button"
-            size="lg"
-            className="transition-transform transform hover:scale-105"
-          >
-            Zarejestruj się za darmo
-          </Button>
-        )}
+        {
+          !user && (
+            <Button id="hero-register-button" size="lg" className="transition-transform transform hover:scale-105">
+              Zarejestruj się za darmo
+            </Button>
+          )
+        }
       </div>
     </div>
   </div>
