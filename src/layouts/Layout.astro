@@ -9,9 +9,18 @@ import "../styles/global.css";
 interface Props {
   title: string;
   mainClass?: string;
+  hideFooter?: boolean;
+  headerPosition?: "sticky" | "absolute";
+  headerVariant?: "light" | "dark";
 }
 
-const { title, mainClass = "flex-grow" } = Astro.props;
+const {
+  title,
+  mainClass = "flex-grow",
+  hideFooter = false,
+  headerPosition,
+  headerVariant,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -26,11 +35,11 @@ const { title, mainClass = "flex-grow" } = Astro.props;
     <ViewTransitions />
   </head>
   <body class="bg-background text-foreground flex min-h-screen flex-col">
-    <Header />
+    <Header position={headerPosition} variant={headerVariant} />
     <main class:list={[mainClass]}>
       <slot />
     </main>
-    <Footer />
+    {!hideFooter && <Footer />}
     <AuthModal client:load />
     <Toaster richColors client:load />
     <style is:global>

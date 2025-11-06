@@ -6,12 +6,12 @@ export interface Props extends FeatureCardProps {}
 const { icon, title, description } = Astro.props;
 ---
 
-<div class="relative overflow-hidden rounded-lg border bg-background p-2">
-  <div class="flex h-[180px] flex-col justify-between rounded-md p-6">
+<div class="relative overflow-hidden rounded-lg border border-white/20 bg-white/[0.02] backdrop-blur-md p-2 shadow-lg">
+  <div class="flex flex-row items-center gap-6 rounded-md p-6 text-black">
     <Fragment set:html={icon} />
     <div class="space-y-2">
       <h3 class="font-bold">{title}</h3>
-      <p class="text-sm text-muted-foreground">
+      <p class="text-sm text-black">
         {description}
       </p>
     </div>

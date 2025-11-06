@@ -10,7 +10,7 @@ const { title } = Astro.props;
 const isProfileComplete = Astro.locals.profileComplete ?? false;
 ---
 
-<Layout title={title} mainClass="flex flex-grow">
+<Layout title={title} mainClass="flex flex-grow" headerPosition="sticky" headerVariant="light">
   <div class="flex w-full">
     <Sidebar isProfileComplete={isProfileComplete} />
     <main class="flex-1 p-8">

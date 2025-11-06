@@ -3,23 +3,24 @@ import { Button } from "@/components/ui/button";
 import UserDropdown from "@/components/Auth/UserDropdown";
 
 const { user } = Astro.locals;
+
+interface Props {
+  position?: "sticky" | "absolute";
+  variant?: "light" | "dark";
+}
+
+const { position = "absolute", variant = "dark" } = Astro.props;
 ---
 
-<header class="bg-background/95 sticky top-0 z-50 w-full border-b border-border/40 backdrop-blur-sm">
-  <div class="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
+<header class:list={[position, "top-0 z-50 w-full backdrop-blur-md bg-white/[0.02] border-b border-[#ED9E8E]"]}>
+  <div
+    class:list={[
+      "flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8",
+      variant === "dark" ? "text-white" : "text-black",
+    ]}
+  >
     <a href="/" class="mr-6 flex items-center space-x-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="h-6 w-6"
-      >
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-      </svg>
+      <img src="/logo.svg" alt="Peerscope logo" class="h-6 w-6" />
       <span class="font-bold">Peerscope</span>
     </a>
     <div class="flex items-center space-x-4">
@@ -32,7 +33,9 @@ const { user } = Astro.locals;
               <Button variant="ghost" id="login-button">
                 Zaloguj się
               </Button>
-              <Button id="register-button">Zarejestruj się</Button>
+              <Button id="register-button" className="transition-transform transform hover:scale-105">
+                Zarejestruj się
+              </Button>
             </>
           )
         }

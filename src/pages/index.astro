@@ -1,18 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HeroSection from "@/components/HeroSection.astro";
-import FeaturesSection from "@/components/FeaturesSection.astro";
-import CallToAction from "@/components/CallToAction.astro";
 import { AuthModal } from "@/components/Auth/AuthModal";
 
 const { user } = Astro.locals;
 ---
 
-<Layout title="Peerscope - Welcome">
+<Layout title="Peerscope - Welcome" hideFooter={true}>
   <main class="flex-grow">
     <HeroSection user={user} />
-    <FeaturesSection />
-    <CallToAction />
   </main>
   <AuthModal client:load />
 </Layout>
